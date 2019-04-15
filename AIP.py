@@ -159,14 +159,14 @@ def button(bot, update):
                               reply_markup=reply_markup)
 
     #This part means that the user has selected one of the three parts of the AIP (GEN, ENR, AD)
-    elif len(USER[user]) == 1 and "+" not in SEARCH[user][0]:
+    elif len(USER[user]) == 1 and len(SEARCH[user]) == 0:
         msg, reply_markup = part_button(bot, update, user)
         bot.edit_message_text(text=msg,
                           chat_id=query.message.chat_id,
                           message_id=query.message.message_id,
                           parse_mode=ParseMode.MARKDOWN,
                           reply_markup=reply_markup)
-    elif len(USER[user]) == 1 and "+" in SEARCH[user][0]:
+    elif len(USER[user]) == 1 and len(SEARCH[user]) == 1:
         bot.delete_message(chat_id=query.message.chat_id,
                            message_id=query.message.message_id)
         
