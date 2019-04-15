@@ -117,7 +117,7 @@ def search(bot, update):
             aerodrome = aerodrome[0][0]
             print (aerodrome + " + " + item[0])
             msg += str(counter) + ". " + aerodrome + " - " + item[0] + "\n"
-            row.append(InlineKeyboardButton(str(counter), callback_data=aerodrome + " + " + item[0]))
+            row.append(InlineKeyboardButton(aerodrome + " - " + item[0], callback_data=aerodrome + " + " + item[0]))
             keyboard.append(row)
             row = []
             counter += 1
