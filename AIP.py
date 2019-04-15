@@ -103,11 +103,13 @@ def search(bot, update):
     counter = 1
     USER[user] = []
     SEARCH[user] = []
+    airport = ''
     msg = 'Search result:\n\n'
     for re in text:
         if 'oi' in re.lower():
             result = database("SELECT file_description FROM 'AD2' WHERE part_name='%s';" % re.upper())
             text.remove(re)
+            airport = re
         else:
             result = database("SELECT file_description FROM 'AD2';")
     for item in result:
@@ -117,9 +119,11 @@ def search(bot, update):
             else:
                 break
         else:
-            aerodrome = database("SELECT part_name FROM 'AD2' WHERE file_description='%s';" % item[0])
-            aerodrome = aerodrome[0][0]
-            print (aerodrome + " + " + item[0])
+            if airport == '':
+                aerodrome = database("SELECT part_name FROM 'AD2' WHERE file_description='%s';" % item[0])
+                aerodrome = aerodrome[0][0]
+            else:
+                aerodrome = airport.upper()
             msg += str(counter) + ". " + aerodrome + " - " + item[0] + "\n"
             row.append(InlineKeyboardButton(str(counter), callback_data=counter))
             SEARCH[user].append(aerodrome + " + " + item[0])
