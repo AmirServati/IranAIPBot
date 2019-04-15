@@ -58,6 +58,7 @@ def start(bot, update):
                    photo = "http://s9.picofile.com/file/8357252342/test.jpg",
                    caption = capt)
     USER[user] = []
+    SEARCH[user] = []
     aip = ['GEN', 'ENR', 'AD']
     keyboard = []
     msg = "*List of AIP parts:*\n\n"
