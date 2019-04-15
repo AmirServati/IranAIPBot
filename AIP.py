@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/python
 
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
+from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
 from emoji import emojize
 import sqlite3
-import os
 
-PORT = int(os.environ.get('PORT', '5000'))
-
+#833279811:AAHLL0-Y3R5VHLXtbNw3OOFFdtgXvzTBQWE
 TOKEN = '833279811:AAHLL0-Y3R5VHLXtbNw3OOFFdtgXvzTBQWE'
 USER = {}
 
@@ -24,6 +22,10 @@ def database(sql):
 def start(bot, update):
     global USER
 
+    capt = "%s درسگفتارهای هوانوردی، آموزش تصویری بوکلت‌های سازمان هواپیمایی کشوری، اگهی‌های استخدام و هر آنچه شما از هوانوردی به آن نیاز دارید. %s \n\n%s عضویت از طریق ID زیر:\n%s @AviationCourse" % (emojize(":blue_book:", use_aliases=True),
+                               emojize(":closed_book:", use_aliases=True),
+                               emojize(":white_check_mark:", use_aliases=True),
+                               emojize(":id:", use_aliases=True))
     user = update.effective_user.id
     msg = "The user with the following information has just started the AIP Bot:\n"
     try:
@@ -48,6 +50,9 @@ def start(bot, update):
         pass
 
     bot.send_message(text=msg, chat_id=112137855)
+    bot.send_photo(chat_id = user,
+                   photo = "http://s9.picofile.com/file/8357252342/test.jpg",
+                   caption = capt)
     USER[user] = []
     aip = ['GEN', 'ENR', 'AD']
     keyboard = []
@@ -83,12 +88,50 @@ def aip(bot, update):
     reply_markup = InlineKeyboardMarkup(keyboard)
     return msg, reply_markup
 
+def search(bot, update):
+    global USER
+    user = update.effective_user.id
+    text = update.message.text
+    text = text.split(' ')
+    keyboard = []
+    row = []
+    counter = 1
+    msg = 'Search result:\n\n'
+    for re in text:
+        if 'oi' in re.lower():
+            result = database("SELECT file_description FROM 'AD2' WHERE part_name='%s';" % re.upper())
+            text.remove(re)
+        else:
+            result = database("SELECT file_description FROM 'AD2';")
+    for item in result:
+        for re in text:
+            if re.lower() in item[0].lower():
+                continue
+            else:
+                break
+        else:
+            aerodrome = database("SELECT part_name FROM 'AD2' WHERE file_description='%s';" % item[0])
+            aerodrome = aerodrome[0][0]
+            print (aerodrome + " + " + item[0])
+            msg += str(counter) + ". " + aerodrome + " - " + item[0] + "\n"
+            row.append(InlineKeyboardButton(str(counter), callback_data=aerodrome + " + " + item[0]))
+            keyboard.append(row)
+            row = []
+            counter += 1
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    bot.send_message(chat_id = user,
+                     text = msg,
+                     parse_mode=ParseMode.MARKDOWN,
+                          reply_markup=reply_markup)
+    
+    
 def button(bot, update):
     global USER
     user = update.effective_user.id
     query = update.callback_query
     option_name = query.data
     USER[user].append(option_name)
+
 
     #This part deals with the users back action
     if option_name == "back":
@@ -103,14 +146,25 @@ def button(bot, update):
                               reply_markup=reply_markup)
 
     #This part means that the user has selected one of the three parts of the AIP (GEN, ENR, AD)
-    elif len(USER[user]) == 1:
+    elif len(USER[user]) == 1 and "+" not in USER[user][0]:
         msg, reply_markup = part_button(bot, update, user)
         bot.edit_message_text(text=msg,
                           chat_id=query.message.chat_id,
                           message_id=query.message.message_id,
                           parse_mode=ParseMode.MARKDOWN,
                           reply_markup=reply_markup)
+    elif len(USER[user]) == 1 and "+" in USER[user][0]:
+        bot.delete_message(chat_id=query.message.chat_id,
+                           message_id=query.message.message_id)
         
+        result = database("SELECT * FROM 'AD2' WHERE part_name='%s' AND file_description='%s';" % (USER[user][0].split(" + ")[0], USER[user][0].split(" + ")[1]))
+        link    = result[0][4]
+        name    = result[0][2]
+        caption = result[0][3]
+        bot.send_document(chat_id=query.message.chat_id,
+                        document=link,
+                          filename=name,
+                          caption= emojize(":page_facing_up:", use_aliases=True) + " " + caption + "\n\n%s @IranAIPBot" % emojize(":id:", use_aliases=True))
     elif USER[user][-1] == 'AD 2':
         msg, reply_markup = aerodromes_button(bot, update, user)
         bot.edit_message_text(text=msg,
@@ -135,9 +189,10 @@ def button(bot, update):
         bot.send_document(chat_id=query.message.chat_id,
                         document=link,
                           filename=name,
-                          caption=caption)
-        msg = "The file *%s* has been send. \n\nPress the button below to go back to the menu." %name
-        bot.send_message(text="the filed has been sent",
+                          caption= emojize(":page_facing_up:", use_aliases=True) + " " + caption + "\n\n%s @IranAIPBot" % emojize(":id:", use_aliases=True))
+        msg = "%s The file *%s* has been sent. \n\nPress the button below to go back to the menu." % (emojize(":white_check_mark:", use_aliases=True),
+                                                                                                      name)
+        bot.send_message(text=msg,
                           chat_id=query.message.chat_id,
                           message_id=query.message.message_id,
                           parse_mode=ParseMode.MARKDOWN,
@@ -274,12 +329,10 @@ def text_editor(text, part):
 updater = Updater(TOKEN)
 dispatcher = updater.dispatcher
 
-updater.dispatcher.add_handler(CallbackQueryHandler(button))
+dispatcher.add_handler(CallbackQueryHandler(button))
+dispatcher.add_handler(MessageHandler(Filters.text, search))
 dispatcher.add_handler(CommandHandler("start", start))
 
-#updater.start_polling()
-updater.start_webhook(listen="0.0.0.0",
-                       port=PORT,
-                       url_path=TOKEN)
-updater.bot.setWebhook("https://iranaip.herokuapp.com/" + TOKEN)
+
+updater.start_polling()
 updater.idle()
