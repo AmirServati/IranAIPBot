@@ -93,6 +93,7 @@ def aip(bot, update):
 
 def search(bot, update):
     global USER
+    USER[user] = []
     user = update.effective_user.id
     text = update.message.text
     text = text.split(' ')
@@ -160,7 +161,7 @@ def button(bot, update):
         bot.delete_message(chat_id=query.message.chat_id,
                            message_id=query.message.message_id)
         
-        result = database("SELECT * FROM 'AD2' WHERE part_name='%s' AND file_description='%s';" % (USER[user][0].split(" + ")[0], USER[user][0].split(" + ")[1]))
+        result = database("SELECT * FROM 'AD2' WHERE part_name='%s' AND file_description='%s';" % (USER[user][0].split("+")[0], USER[user][0].split("+")[1]))
         link    = result[0][4]
         name    = result[0][2]
         caption = result[0][3]
