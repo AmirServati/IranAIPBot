@@ -5,6 +5,9 @@ from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageH
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
 from emoji import emojize
 import sqlite3
+import os
+
+PORT = int(os.environ.get('PORT', '5000'))
 
 #833279811:AAHLL0-Y3R5VHLXtbNw3OOFFdtgXvzTBQWE
 TOKEN = '833279811:AAHLL0-Y3R5VHLXtbNw3OOFFdtgXvzTBQWE'
@@ -334,5 +337,8 @@ dispatcher.add_handler(MessageHandler(Filters.text, search))
 dispatcher.add_handler(CommandHandler("start", start))
 
 
-updater.start_polling()
+updater.start_webhook(listen="0.0.0.0",
+                       port=PORT,
+                       url_path=TOKEN)
+updater.bot.setWebhook("https://iranaip.herokuapp.com/" + TOKEN)
 updater.idle()
