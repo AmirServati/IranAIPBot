@@ -12,6 +12,7 @@ PORT = int(os.environ.get('PORT', '5000'))
 #833279811:AAHLL0-Y3R5VHLXtbNw3OOFFdtgXvzTBQWE
 TOKEN = '833279811:AAHLL0-Y3R5VHLXtbNw3OOFFdtgXvzTBQWE'
 USER = {}
+SEARCH = {}
 
 
 def database(sql):
@@ -93,6 +94,7 @@ def aip(bot, update):
 
 def search(bot, update):
     global USER
+    global SEARCH
     user = update.effective_user.id
     text = update.message.text
     text = text.split(' ')
@@ -100,6 +102,7 @@ def search(bot, update):
     row = []
     counter = 1
     USER[user] = []
+    SEARCH[user] = []
     msg = 'Search result:\n\n'
     for re in text:
         if 'oi' in re.lower():
@@ -118,7 +121,8 @@ def search(bot, update):
             aerodrome = aerodrome[0][0]
             print (aerodrome + " + " + item[0])
             msg += str(counter) + ". " + aerodrome + " - " + item[0] + "\n"
-            row.append(InlineKeyboardButton(aerodrome + " - " + item[0], callback_data=aerodrome + " + " + item[0]))
+            row.append(InlineKeyboardButton(str(counter), callback_data=counter))
+            SEARCH[user].append(aerodrome + " + " + item[0])
             keyboard.append(row)
             row = []
             counter += 1
@@ -150,22 +154,22 @@ def button(bot, update):
                               reply_markup=reply_markup)
 
     #This part means that the user has selected one of the three parts of the AIP (GEN, ENR, AD)
-    elif len(USER[user]) == 1 and "+" not in USER[user][0]:
+    elif len(USER[user]) == 1 and "+" not in SEARCH[user][0]:
         msg, reply_markup = part_button(bot, update, user)
         bot.edit_message_text(text=msg,
                           chat_id=query.message.chat_id,
                           message_id=query.message.message_id,
                           parse_mode=ParseMode.MARKDOWN,
                           reply_markup=reply_markup)
-    elif len(USER[user]) == 1 and "+" in USER[user][0]:
+    elif len(USER[user]) == 1 and "+" in SEARCH[user][0]:
         bot.delete_message(chat_id=query.message.chat_id,
                            message_id=query.message.message_id)
         
-        result = database("SELECT * FROM 'AD2' WHERE part_name='%s' AND file_description='%s';" % (USER[user][0].split("+")[0], USER[user][0].split("+")[1]))
+        result = database("SELECT * FROM 'AD2' WHERE part_name='%s' AND file_description='%s';" % (SEARCH[user][0].split(" + ")[0], SEARCH[user][0].split(" + ")[1]))
         link    = result[0][4]
         name    = result[0][2]
         caption = result[0][3]
-        bot.send_document(chat_id=query.message.chat_id,
+        bot.send_document(chat_id=user,
                         document=link,
                           filename=name,
                           caption= emojize(":page_facing_up:", use_aliases=True) + " " + caption + "\n\n%s @IranAIPBot" % emojize(":id:", use_aliases=True))
