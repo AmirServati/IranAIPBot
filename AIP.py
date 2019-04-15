@@ -93,13 +93,13 @@ def aip(bot, update):
 
 def search(bot, update):
     global USER
-    USER[user] = []
     user = update.effective_user.id
     text = update.message.text
     text = text.split(' ')
     keyboard = []
     row = []
     counter = 1
+    USER[user] = []
     msg = 'Search result:\n\n'
     for re in text:
         if 'oi' in re.lower():
