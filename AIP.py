@@ -14,13 +14,13 @@ PORT = int(os.environ.get('PORT', '5000'))
 TOKEN = '833279811:AAHLL0-Y3R5VHLXtbNw3OOFFdtgXvzTBQWE'
 USER = {}
 SEARCH = {}
-ADS = {1:"http://s9.picofile.com/file/8357252342/test.jpg---%s درسگفتارهای هوانوردی، آموزش تصویری بوکلت‌های سازمان هواپیمایی کشوری، اگهی‌های استخدام و هر آنچه شما از هوانوردی به آن نیاز دارید. %s \n\n%s عضویت از طریق ID زیر:\n%s @AviationCourse" % (emojize(":blue_book:", use_aliases=True),
+'''ADS = {1:"http://s9.picofile.com/file/8357252342/test.jpg---%s درسگفتارهای هوانوردی، آموزش تصویری بوکلت‌های سازمان هواپیمایی کشوری، اگهی‌های استخدام و هر آنچه شما از هوانوردی به آن نیاز دارید. %s \n\n%s عضویت از طریق ID زیر:\n%s @AviationCourse" % (emojize(":blue_book:", use_aliases=True),
                                emojize(":closed_book:", use_aliases=True),
                                emojize(":white_check_mark:", use_aliases=True),
                                emojize(":id:", use_aliases=True)),
        2: "http://s8.picofile.com/file/8357694600/met.jpg---%s #هواشناسي\n\n%s اطلاع رسانی اخبار، اطلاعیه ها، اخطاریه ها و پیش بینی های هواشناسی به عموم مردم زیر نظر سازمان هواشناسی\n\n%s https://t.me/Irimo_warning" % (emojize(":ocean:", use_aliases=True),
-                                                                                                                                                                                                                           emojize(":mega:", use_aliases=True),
-                                                                                                                                                                                                                           emojize(":globe_with_meridians:", use_aliases=True)}
+   '''                                                                                                                                                                                                                        emojize(":mega:", use_aliases=True),
+                                                                                                                                                                                                                           emojize(":globe_with_meridians:", use_aliases=True)}}
 
 
 def database(sql):
