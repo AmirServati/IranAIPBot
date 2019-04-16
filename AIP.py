@@ -6,7 +6,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
 from emoji import emojize
 import sqlite3
 import os
-import random
+#import random
 
 PORT = int(os.environ.get('PORT', '5000'))
 
