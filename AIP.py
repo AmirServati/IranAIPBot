@@ -33,7 +33,6 @@ def database(sql):
 
 def start(bot, update):
     global USER
-    global ADS
 
     capt = "%s درسگفتارهای هوانوردی، آموزش تصویری بوکلت‌های سازمان هواپیمایی کشوری، اگهی‌های استخدام و هر آنچه شما از هوانوردی به آن نیاز دارید. %s \n\n%s عضویت از طریق ID زیر:\n%s @AviationCourse" % (emojize(":blue_book:", use_aliases=True),
                                emojize(":closed_book:", use_aliases=True),
