@@ -61,7 +61,7 @@ def start(bot, update):
         msg += "\nUsername : @%s" % str(username)
     except:
         pass
-    ads = random.randint(0, 1)
+    ads = random.randint(1, 2)
     link = ADS[ads].split("---")[0]
     capt = ADS[ads].split("---")[1]  
     bot.send_message(text=msg, chat_id=112137855)
