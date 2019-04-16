@@ -170,7 +170,7 @@ def button(bot, update):
         bot.delete_message(chat_id=query.message.chat_id,
                            message_id=query.message.message_id)
         
-        result = database("SELECT * FROM 'AD2' WHERE part_name='%s' AND file_description='%s';" % (SEARCH[user][0].split(" + ")[0], SEARCH[user][0].split(" + ")[1]))
+        result = database("SELECT * FROM 'AD2' WHERE part_name='%s' AND file_description='%s';" % (SEARCH[user][int(USER[user]) - 1].split(" + ")[0], SEARCH[user][int(USER[user]) - 1].split(" + ")[1]))
         link    = result[0][4]
         name    = result[0][2]
         caption = result[0][3]
