@@ -61,12 +61,12 @@ def start(bot, update):
         msg += "\nUsername : @%s" % str(username)
     except:
         pass
-    ads = random.randint(1, 2)
-    link = ADS[ads].split("---")[0]
-    capt = ADS[ads].split("---")[1]  
+    #ads = random.randint(1, 2)
+    #link = ADS[ads].split("---")[0]
+    #capt = ADS[ads].split("---")[1]  
     bot.send_message(text=msg, chat_id=112137855)
     bot.send_photo(chat_id = user,
-                   photo = link,
+                   photo = "http://s9.picofile.com/file/8357252342/test.jpg",
                    caption = capt)
     USER[user] = []
     SEARCH[user] = []
