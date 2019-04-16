@@ -166,7 +166,7 @@ def button(bot, update):
                           message_id=query.message.message_id,
                           parse_mode=ParseMode.MARKDOWN,
                           reply_markup=reply_markup)
-    elif len(USER[user]) == 1 and len(SEARCH[user]) == 1:
+    elif len(USER[user]) == 1 and len(SEARCH[user]) > 0:
         bot.delete_message(chat_id=query.message.chat_id,
                            message_id=query.message.message_id)
         
