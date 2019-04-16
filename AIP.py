@@ -93,6 +93,22 @@ def aip(bot, update):
     reply_markup = InlineKeyboardMarkup(keyboard)
     return msg, reply_markup
 
+def howto(bot, update):
+    global USER
+    msg = '''%s موارد و نحوه استفاده از بات:
+
+1. برای دسترسی به AIP از دستور /start استفاده کنید.
+
+2. برای جست و جو کردن چارت، SID، STAR و IAC مورد نظر خود، کافی است کلید مورد نظر خود را تایپ کنید. به عنوان مثال:
+
+dehnamak 3a
+parot
+oiii ils
+oitt circling ndb''' % emojize(":loudspeaker:", use_aliases=True)
+    user = update.effective_user.id
+    bot.send_message(chat_id=user,
+                     text=msg)
+
 def search(bot, update):
     global USER
     global SEARCH
@@ -105,7 +121,7 @@ def search(bot, update):
     USER[user] = []
     SEARCH[user] = []
     airport = ''
-    msg = 'Search result:\n\n'
+    msg = emojize(":mag_right:", use_aliases=True) + ' Search result:\n\n'
     for re in text:
         if 'oi' in re.lower():
             result = database("SELECT file_description FROM 'AD2' WHERE part_name='%s';" % re.upper())
@@ -128,14 +144,17 @@ def search(bot, update):
             msg += str(counter) + ". " + aerodrome + " - " + item[0] + "\n"
             row.append(InlineKeyboardButton(str(counter), callback_data=counter))
             SEARCH[user].append(aerodrome + " + " + item[0])
-            keyboard.append(row)
-            row = []
+            if len(row) % 5 == 0:
+                keyboard.append(row)
+                row = []
             counter += 1
+    keyboard.append(row)
+    msg += '\n\n_Select the number of your search result:_'
     reply_markup = InlineKeyboardMarkup(keyboard)
     bot.send_message(chat_id = user,
                      text = msg,
                      parse_mode=ParseMode.MARKDOWN,
-                          reply_markup=reply_markup)
+                     reply_markup=reply_markup)
     
     
 def button(bot, update):
@@ -345,10 +364,11 @@ dispatcher = updater.dispatcher
 dispatcher.add_handler(CallbackQueryHandler(button))
 dispatcher.add_handler(MessageHandler(Filters.text, search))
 dispatcher.add_handler(CommandHandler("start", start))
+dispatcher.add_handler(CommandHandler("help", howto))
 
-
+#updater.start_polling()
 updater.start_webhook(listen="0.0.0.0",
-                       port=PORT,
-                       url_path=TOKEN)
+                      port=PORT,
+                     url_path=TOKEN)
 updater.bot.setWebhook("https://iranaip.herokuapp.com/" + TOKEN)
 updater.idle()
