@@ -11,7 +11,7 @@ import random
 PORT = int(os.environ.get('PORT', '5000'))
 
 #833279811:AAHLL0-Y3R5VHLXtbNw3OOFFdtgXvzTBQWE
-TOKEN = '833279811:AAHLL0-Y3R5VHLXtbNw3OOFFdtgXvzTBQWE'
+TOKEN = '676428333:AAEYXfSt7tDKsqSzEloCwUDlgFdv-2tq3UU'
 USER = {}
 SEARCH = {}
 ADS = {1 : "http://s9.picofile.com/file/8357252342/test.jpg---%s درسگفتارهای هوانوردی، آموزش تصویری بوکلت‌های سازمان هواپیمایی کشوری، اگهی‌های استخدام و هر آنچه شما از هوانوردی به آن نیاز دارید. %s \n\n%s عضویت از طریق ID زیر:\n%s @AviationCourse" % (emojize(":blue_book:", use_aliases=True),
@@ -73,12 +73,15 @@ def start(bot, update):
     aip = ['GEN', 'ENR', 'AD']
     keyboard = []
     msg = "*List of AIP parts:*\n\n"
-
+    row = []
     for i in range(len(aip)):
         msg += "\t\t" + str(i + 1) + ". " + aip[i] + "\n"
-        row = []
         row.append(InlineKeyboardButton(str(aip[i]), callback_data=aip[i]))
-        keyboard.append(row)
+    keyboard.append(row)
+    #row = []
+    #row.append(InlineKeyboardButton('AIC', callback_data='AIC'))
+    #row.append(InlineKeyboardButton('SUP', callback_data='SUP'))
+    #keyboard.append(row)
 
     msg += "\n_Please select your desired AIP part:_"
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -94,11 +97,15 @@ def aip(bot, update):
     keyboard = []
     msg = "*List of AIP parts:*\n\n"
 
+    row = []
     for i in range(len(aip)):
         msg += "\t\t" + str(i + 1) + ". " + aip[i] + "\n"
-        row = []
         row.append(InlineKeyboardButton(str(aip[i]), callback_data=aip[i]))
-        keyboard.append(row)
+    keyboard.append(row)
+    #row = []
+    #row.append(InlineKeyboardButton('AIC', callback_data='AIC'))
+    #row.append(InlineKeyboardButton('SUP', callback_data='SUP'))
+    #keyboard.append(row)
 
     msg += "\n_Please select your desired AIP part:_"
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -251,7 +258,10 @@ def part_button(bot, update, user):
         if str(result[i][0]) in msg:
             pass
         else:
-            msg += "\t\t" + str(list_counter) + ".\t" + "*" + str(result[i][0])+ "*" + " (_ " + str(result[i][1]) + " _) " +  "\n"
+            if str(result[i][1]) != "":
+                msg += "\t\t" + str(list_counter) + ".\t" + "*" + str(result[i][0])+ "*" + " (_ " + str(result[i][1]) + " _) " +  "\n"
+            else:
+                msg += "\t\t" + str(list_counter) + ".\t" + "*" + str(result[i][0])+ "*" +  "\n"
             row.append(InlineKeyboardButton(str(result[i][0]), callback_data=result[i][0]))
             if len(row) % 4 == 0:
                 keyboard.append(row)
@@ -369,17 +379,28 @@ def text_editor(text, part):
         return emojize(":satellite:", use_aliases=True)
     else:
         return ""
+
+def document(bot, update):
+    user = update.effective_user.id
+    if user == 112137855:
+        file = update.effective_message.document.file_id
+        name = update.effective_message.document.file_name
+        msg = str(name) + '\n' + str(file)
+        bot.send_message(chat_id = 112137855,
+                         text = msg)
+    
 updater = Updater(TOKEN)
 dispatcher = updater.dispatcher
 
 dispatcher.add_handler(CallbackQueryHandler(button))
 dispatcher.add_handler(MessageHandler(Filters.text, search))
+dispatcher.add_handler(MessageHandler(Filters.document, document))
 dispatcher.add_handler(CommandHandler("start", start))
 dispatcher.add_handler(CommandHandler("help", howto))
 
-#updater.start_polling()
-updater.start_webhook(listen="0.0.0.0",
-                      port=PORT,
-                     url_path=TOKEN)
-updater.bot.setWebhook("https://iranaip.herokuapp.com/" + TOKEN)
+updater.start_polling()
+#updater.start_webhook(listen="0.0.0.0",
+#                      port=PORT,
+#                     url_path=TOKEN)
+#updater.bot.setWebhook("https://iranaip.herokuapp.com/" + TOKEN)
 updater.idle()
