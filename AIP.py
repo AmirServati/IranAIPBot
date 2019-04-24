@@ -11,7 +11,7 @@ import random
 PORT = int(os.environ.get('PORT', '5000'))
 
 #833279811:AAHLL0-Y3R5VHLXtbNw3OOFFdtgXvzTBQWE
-TOKEN = '676428333:AAEYXfSt7tDKsqSzEloCwUDlgFdv-2tq3UU'
+TOKEN = '833279811:AAHLL0-Y3R5VHLXtbNw3OOFFdtgXvzTBQWE'
 USER = {}
 SEARCH = {}
 ADS = {1 : "http://s9.picofile.com/file/8357252342/test.jpg---%s درسگفتارهای هوانوردی، آموزش تصویری بوکلت‌های سازمان هواپیمایی کشوری، اگهی‌های استخدام و هر آنچه شما از هوانوردی به آن نیاز دارید. %s \n\n%s عضویت از طریق ID زیر:\n%s @AviationCourse" % (emojize(":blue_book:", use_aliases=True),
@@ -398,9 +398,9 @@ dispatcher.add_handler(MessageHandler(Filters.document, document))
 dispatcher.add_handler(CommandHandler("start", start))
 dispatcher.add_handler(CommandHandler("help", howto))
 
-updater.start_polling()
-#updater.start_webhook(listen="0.0.0.0",
-#                      port=PORT,
-#                     url_path=TOKEN)
-#updater.bot.setWebhook("https://iranaip.herokuapp.com/" + TOKEN)
+#updater.start_polling()
+updater.start_webhook(listen="0.0.0.0",
+                      port=PORT,
+                     url_path=TOKEN)
+updater.bot.setWebhook("https://iranaip.herokuapp.com/" + TOKEN)
 updater.idle()
