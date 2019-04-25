@@ -78,10 +78,11 @@ def start(bot, update):
         msg += "\t\t" + str(i + 1) + ". " + aip[i] + "\n"
         row.append(InlineKeyboardButton(str(aip[i]), callback_data=aip[i]))
     keyboard.append(row)
-    #row = []
-    #row.append(InlineKeyboardButton('AIC', callback_data='AIC'))
-    #row.append(InlineKeyboardButton('SUP', callback_data='SUP'))
-    #keyboard.append(row)
+    row = []
+    row.append(InlineKeyboardButton('AIC', callback_data='AIC'))
+    row.append(InlineKeyboardButton('SUP', callback_data='SUP'))
+    keyboard.append(row)
+    msg += "\n*Additional Parts:*\n\n\t\t1. AIC\n\t\t2. SUP\n"
 
     msg += "\n_Please select your desired AIP part:_"
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -102,10 +103,11 @@ def aip(bot, update):
         msg += "\t\t" + str(i + 1) + ". " + aip[i] + "\n"
         row.append(InlineKeyboardButton(str(aip[i]), callback_data=aip[i]))
     keyboard.append(row)
-    #row = []
-    #row.append(InlineKeyboardButton('AIC', callback_data='AIC'))
-    #row.append(InlineKeyboardButton('SUP', callback_data='SUP'))
-    #keyboard.append(row)
+    row = []
+    row.append(InlineKeyboardButton('AIC', callback_data='AIC'))
+    row.append(InlineKeyboardButton('SUP', callback_data='SUP'))
+    keyboard.append(row)
+    msg += "\n*Additional Parts:*\n\n\t\t1. AIC\n\t\t2. SUP\n"
 
     msg += "\n_Please select your desired AIP part:_"
     reply_markup = InlineKeyboardMarkup(keyboard)
