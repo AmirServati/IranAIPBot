@@ -144,7 +144,24 @@ def search(bot, update):
     USER[user] = []
     SEARCH[user] = []
     airport = ''
+    f = open("Routes.txt", "r")
+    routes = f.readlines()
+    f.close()
     msg = emojize(":mag_right:", use_aliases=True) + ' Search result:\n\n'
+    if len(text) == 1:
+        for route in routes:
+            if text[0].upper() in route.split(":")[1]:
+                msg += emojize(":motorway:", use_aliases=True) + " The Routes which cross through *%s* are:\n" % text[0].upper()
+                break
+            elif text[0].upper() == route.split(":")[0]:
+                msg += emojize(":small_red_triangle:", use_aliases=True) + " The Points which *%s* crosses through are: \n" % text[0].upper()
+                break
+        for route in routes:
+            if text[0].upper() in route.split(":")[1]:
+                msg += "\n_" + route.split(":")[0] + "_"
+            elif text[0].upper() == route.split(":")[0]:
+                msg += "_\n" + route.split(":")[1] + "_"
+    msg += "\n\n%s The files that contain your search keyword:\n\n" % emojize(":ledger:", use_aliases=True)
     for re in text:
         if 'oi' in re.lower():
             result = database("SELECT file_description FROM 'AD2' WHERE part_name='%s';" % re.upper())
