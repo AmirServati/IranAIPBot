@@ -60,7 +60,7 @@ def start(bot, update):
     except:
         pass
     ads = random.randint(1, 10)
-    if ads >= 4:
+    if ads >= 3:
         ads = 2
     else:
         ads = 1
