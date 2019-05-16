@@ -322,16 +322,14 @@ def button(bot, update):
         link, name, caption, reply_markup = file(bot, update, user)
         bot.delete_message(chat_id=query.message.chat_id,
                            message_id=query.message.message_id)
-        print (link)
-        print (name)
-        print (caption)
-        #bot.send_document(chat_id=query.message.chat_id,
-        #                document=link,
-        #                  filename=name,
-        #                  caption= emojize(":page_facing_up:", use_aliases=True) + " " + caption + "\n\n%s @IranAIPBot" % emojize(":id:", use_aliases=True))
-        #msg = "%s The file *%s* has been sent. \n\nPress the button below to go back to the menu." % (emojize(":white_check_mark:", use_aliases=True),
-        #                                                                                              name)
-        bot.send_message(text=link,
+
+        bot.send_document(chat_id=query.message.chat_id,
+                        document=link,
+                          filename=name,
+                          caption= emojize(":page_facing_up:", use_aliases=True) + " " + caption + "\n\n%s @IranAIPBot" % emojize(":id:", use_aliases=True))
+        msg = "%s The file *%s* has been sent. \n\nPress the button below to go back to the menu." % (emojize(":white_check_mark:", use_aliases=True),
+                                                                                                     name)
+        bot.send_message(text=msg,
                           chat_id=query.message.chat_id,
                           parse_mode=ParseMode.MARKDOWN,
                           reply_markup=reply_markup)
