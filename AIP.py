@@ -387,7 +387,7 @@ def airac_part_button(bot, update, user):
     return msg, reply_markup
 
 def aerodromes_button(bot, update, user):
-    result = database("SELECT * FROM 'AD2';")
+    result = sorted(database("SELECT * FROM 'AD2';"))
     keyboard = []
     msg = """%s *Selected AIP part:* _%s_
 %s *Selected section:* _%s_
@@ -415,7 +415,7 @@ def aerodromes_button(bot, update, user):
     return msg, reply_markup
 
 def airac_aerodromes_button(bot, update, user):
-    result = database("SELECT * FROM 'AIRAC_AD2';")
+    result = sorted(database("SELECT * FROM 'AIRAC_AD2';"))
     keyboard = []
     msg = """%s *Selected AIP part:* _%s_
 %s *Selected section:* _%s_
@@ -444,7 +444,7 @@ def airac_aerodromes_button(bot, update, user):
 
 def subPart_button(bot, update, user):
     if USER[user][1] == 'AD 2':
-        result = database("SELECT * FROM 'AD2' WHERE part_name='%s';" %  USER[user][2])
+        result = sorted(database("SELECT * FROM 'AD2' WHERE part_name='%s';" %  USER[user][2]))
         msg = """%s *Selected AIP part:* _%s_
 %s *Selected section:* _%s_
 %s *Selected aerodrome:* _%s_
@@ -481,7 +481,7 @@ def subPart_button(bot, update, user):
 
 def airac_subPart_button(bot, update, user):
     if USER[user][2] == 'AD 2':
-        result = database("SELECT * FROM 'AIRAC_AD2' WHERE part_name='%s';" %  USER[user][3])
+        result = sorted(database("SELECT * FROM 'AIRAC_AD2' WHERE part_name='%s';" %  USER[user][3]))
         msg = """%s *Selected AIP part:* _%s_
 %s *Selected section:* _%s_
 %s *Selected aerodrome:* _%s_
