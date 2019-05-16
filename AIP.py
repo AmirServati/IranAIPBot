@@ -85,6 +85,9 @@ def start(bot, update):
     row.append(InlineKeyboardButton('AIC', callback_data='AIC'))
     row.append(InlineKeyboardButton('SUP', callback_data='SUP'))
     keyboard.append(row)
+    row = []
+    row.append(InlineKeyboardButton('AIRAC 2/19', callback_data='AIRAC'))
+    keyboard.append(row)
     msg += "\n*Additional Parts:*\n\n\t\t1. AIC\n\t\t2. SUP\n"
 
     msg += "\n_Please select your desired AIP part:_"
@@ -94,7 +97,7 @@ def start(bot, update):
 
 def aip(bot, update):
     global USER
-
+    print("done")
     user = update.effective_user.id
     USER[user] = []
     aip = ['GEN', 'ENR', 'AD']
@@ -109,6 +112,9 @@ def aip(bot, update):
     row = []
     row.append(InlineKeyboardButton('AIC', callback_data='AIC'))
     row.append(InlineKeyboardButton('SUP', callback_data='SUP'))
+    keyboard.append(row)
+    row = []
+    row.append(InlineKeyboardButton('AIRAC 2-19', callback_data='AIRAC'))
     keyboard.append(row)
     msg += "\n*Additional Parts:*\n\n\t\t1. AIC\n\t\t2. SUP\n"
 
@@ -195,8 +201,8 @@ def search(bot, update):
                      text = msg,
                      parse_mode=ParseMode.MARKDOWN,
                      reply_markup=reply_markup)
-    
-    
+
+
 def button(bot, update):
     global USER
     user = update.effective_user.id
@@ -210,7 +216,27 @@ def button(bot, update):
         USER[user] = USER[user][:-2]
 
     if len(USER[user]) == 0:
-        msg, reply_markup = aip(bot, update)
+        USER[user] = []
+        aip = ['GEN', 'ENR', 'AD']
+        keyboard = []
+        msg = "*List of AIP parts:*\n\n"
+
+        row = []
+        for i in range(len(aip)):
+            msg += "\t\t" + str(i + 1) + ". " + aip[i] + "\n"
+            row.append(InlineKeyboardButton(str(aip[i]), callback_data=aip[i]))
+        keyboard.append(row)
+        row = []
+        row.append(InlineKeyboardButton('AIC', callback_data='AIC'))
+        row.append(InlineKeyboardButton('SUP', callback_data='SUP'))
+        keyboard.append(row)
+        row = []
+        row.append(InlineKeyboardButton('AIRAC 2-19', callback_data='AIRAC'))
+        keyboard.append(row)
+        msg += "\n*Additional Parts:*\n\n\t\t1. AIC\n\t\t2. SUP\n"
+
+        msg += "\n_Please select your desired AIP part:_"
+        reply_markup = InlineKeyboardMarkup(keyboard)
         bot.edit_message_text(text=msg,
                               chat_id=query.message.chat_id,
                               message_id=query.message.message_id,
@@ -218,8 +244,33 @@ def button(bot, update):
                               reply_markup=reply_markup)
 
     #This part means that the user has selected one of the three parts of the AIP (GEN, ENR, AD)
-    elif len(USER[user]) == 1 and len(SEARCH[user]) == 0:
+    elif len(USER[user]) == 1 and len(SEARCH[user]) == 0 and USER[user][0] != 'AIRAC':
         msg, reply_markup = part_button(bot, update, user)
+        bot.edit_message_text(text=msg,
+                          chat_id=query.message.chat_id,
+                          message_id=query.message.message_id,
+                          parse_mode=ParseMode.MARKDOWN,
+                          reply_markup=reply_markup)
+    elif len(USER[user]) == 1 and len(SEARCH[user]) == 0 and USER[user][0] == 'AIRAC':
+        aip = ['GEN', 'ENR', 'AD']
+        keyboard = []
+        msg = "*List of AIRAC AIP parts:*\n\n"
+
+        row = []
+        for i in range(len(aip)):
+            msg += "\t\t" + str(i + 1) + ". " + aip[i] + "\n"
+            row.append(InlineKeyboardButton(str(aip[i]), callback_data=aip[i]))
+        keyboard.append(row)
+        keyboard.append([InlineKeyboardButton("Go Back to AIP", callback_data="back")])
+        msg += "\n_Please select your desired AIRAC AIP part:_"
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        bot.edit_message_text(text=msg,
+                          chat_id=query.message.chat_id,
+                          message_id=query.message.message_id,
+                          parse_mode=ParseMode.MARKDOWN,
+                          reply_markup=reply_markup)
+    elif len(USER[user]) == 2 and len(SEARCH[user]) == 0 and USER[user][0] == 'AIRAC':
+        msg, reply_markup = airac_part_button(bot, update, user)
         bot.edit_message_text(text=msg,
                           chat_id=query.message.chat_id,
                           message_id=query.message.message_id,
@@ -228,7 +279,7 @@ def button(bot, update):
     elif len(USER[user]) == 1 and len(SEARCH[user]) > 0:
         bot.delete_message(chat_id=query.message.chat_id,
                            message_id=query.message.message_id)
-        
+
         result = database("SELECT * FROM 'AD2' WHERE part_name='%s' AND file_description='%s';" % (SEARCH[user][int(USER[user][0]) - 1].split(" + ")[0], SEARCH[user][int(USER[user][0]) - 1].split(" + ")[1]))
         link    = result[0][4]
         name    = result[0][2]
@@ -237,16 +288,30 @@ def button(bot, update):
                         document=link,
                           filename=name,
                           caption= emojize(":page_facing_up:", use_aliases=True) + " " + caption + "\n\n%s @IranAIPBot" % emojize(":id:", use_aliases=True))
-    elif USER[user][-1] == 'AD 2':
+    elif USER[user][-1] == 'AD 2' and USER[user][0] != 'AIRAC':
         msg, reply_markup = aerodromes_button(bot, update, user)
         bot.edit_message_text(text=msg,
                           chat_id=query.message.chat_id,
                           message_id=query.message.message_id,
                           parse_mode=ParseMode.MARKDOWN,
                           reply_markup=reply_markup)
+    elif USER[user][-1] == 'AD 2' and USER[user][0] == 'AIRAC':
+        msg, reply_markup = airac_aerodromes_button(bot, update, user)
+        bot.edit_message_text(text=msg,
+                          chat_id=query.message.chat_id,
+                          message_id=query.message.message_id,
+                          parse_mode=ParseMode.MARKDOWN,
+                          reply_markup=reply_markup)
     #This part means that the user has selected the subpart of one the parts excluding AD 2
-    elif len(USER[user]) == 2 or (USER[user][1] == 'AD 2' and len(USER[user]) == 3):
+    elif (len(USER[user]) == 2 and USER[user][0] != 'AIRAC') or (USER[user][1] == 'AD 2' and len(USER[user]) == 3):
         msg, reply_markup = subPart_button(bot, update, user)
+        bot.edit_message_text(text=msg,
+                          chat_id=query.message.chat_id,
+                          message_id=query.message.message_id,
+                          parse_mode=ParseMode.MARKDOWN,
+                          reply_markup=reply_markup)
+    elif (len(USER[user]) == 3 and USER[user][0] == 'AIRAC') or (USER[user][2] == 'AD 2' and len(USER[user]) == 4):
+        msg, reply_markup = airac_subPart_button(bot, update, user)
         bot.edit_message_text(text=msg,
                           chat_id=query.message.chat_id,
                           message_id=query.message.message_id,
@@ -257,16 +322,17 @@ def button(bot, update):
         link, name, caption, reply_markup = file(bot, update, user)
         bot.delete_message(chat_id=query.message.chat_id,
                            message_id=query.message.message_id)
-        
-        bot.send_document(chat_id=query.message.chat_id,
-                        document=link,
-                          filename=name,
-                          caption= emojize(":page_facing_up:", use_aliases=True) + " " + caption + "\n\n%s @IranAIPBot" % emojize(":id:", use_aliases=True))
-        msg = "%s The file *%s* has been sent. \n\nPress the button below to go back to the menu." % (emojize(":white_check_mark:", use_aliases=True),
-                                                                                                      name)
-        bot.send_message(text=msg,
+        print (link)
+        print (name)
+        print (caption)
+        #bot.send_document(chat_id=query.message.chat_id,
+        #                document=link,
+        #                  filename=name,
+        #                  caption= emojize(":page_facing_up:", use_aliases=True) + " " + caption + "\n\n%s @IranAIPBot" % emojize(":id:", use_aliases=True))
+        #msg = "%s The file *%s* has been sent. \n\nPress the button below to go back to the menu." % (emojize(":white_check_mark:", use_aliases=True),
+        #                                                                                              name)
+        bot.send_message(text=link,
                           chat_id=query.message.chat_id,
-                          message_id=query.message.message_id,
                           parse_mode=ParseMode.MARKDOWN,
                           reply_markup=reply_markup)
 
@@ -296,6 +362,32 @@ def part_button(bot, update, user):
     reply_markup = InlineKeyboardMarkup(keyboard)
     return msg, reply_markup
 
+def airac_part_button(bot, update, user):
+    result = database("SELECT * FROM 'AIRAC_%s';" % USER[user][1])
+    keyboard = []
+    msg = emojize(":books:", use_aliases=True) + " *Selected AIP part: * _%s_\n\n" % USER[user][1]
+    list_counter = 1
+    row = []
+    for i in range(len(result)):
+        if str(result[i][0]) in msg:
+            pass
+        else:
+            if str(result[i][1]) != "":
+                msg += "\t\t" + str(list_counter) + ".\t" + "*" + str(result[i][0])+ "*" + " (_ " + str(result[i][1]) + " _) " +  "\n"
+            else:
+                msg += "\t\t" + str(list_counter) + ".\t" + "*" + str(result[i][0])+ "*" +  "\n"
+            row.append(InlineKeyboardButton(str(result[i][0]), callback_data=result[i][0]))
+            if len(row) % 4 == 0:
+                keyboard.append(row)
+                row = []
+            list_counter += 1
+    else:
+        keyboard.append(row)
+
+    keyboard.append([InlineKeyboardButton("Go Back to AIRAC AIP", callback_data="back")])
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    return msg, reply_markup
+
 def aerodromes_button(bot, update, user):
     result = database("SELECT * FROM 'AD2';")
     keyboard = []
@@ -322,7 +414,35 @@ def aerodromes_button(bot, update, user):
 
     keyboard.append([InlineKeyboardButton("Go Back to AD", callback_data="back")])
     reply_markup = InlineKeyboardMarkup(keyboard)
-    return msg, reply_markup    
+    return msg, reply_markup
+
+def airac_aerodromes_button(bot, update, user):
+    result = database("SELECT * FROM 'AIRAC_AD2';")
+    keyboard = []
+    msg = """%s *Selected AIP part:* _%s_
+%s *Selected section:* _%s_
+\n_Please select your desired aerodrome_:\n\n""" % (emojize(":books:", use_aliases=True),
+                                    USER[user][1],
+                                    emojize(":closed_book:", use_aliases=True),
+                                    USER[user][2])
+    list_counter = 1
+    row = []
+    for i in range(len(result)):
+        if str(result[i][0]) in msg:
+            pass
+        else:
+            msg += "\t\t" + str(list_counter) + ".\t" + "*" + str(result[i][0])+ "*" + " (_ " + str(result[i][1]) + " _) " +  "\n"
+            row.append(InlineKeyboardButton(str(result[i][0]), callback_data=result[i][0]))
+            if len(row) % 5 == 0:
+                keyboard.append(row)
+                row = []
+            list_counter += 1
+    else:
+        keyboard.append(row)
+
+    keyboard.append([InlineKeyboardButton("Go Back to AD", callback_data="back")])
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    return msg, reply_markup
 
 def subPart_button(bot, update, user):
     if USER[user][1] == 'AD 2':
@@ -361,10 +481,50 @@ def subPart_button(bot, update, user):
     reply_markup = InlineKeyboardMarkup(keyboard)
     return msg, reply_markup
 
+def airac_subPart_button(bot, update, user):
+    if USER[user][2] == 'AD 2':
+        result = database("SELECT * FROM 'AIRAC_AD2' WHERE part_name='%s';" %  USER[user][3])
+        msg = """%s *Selected AIP part:* _%s_
+%s *Selected section:* _%s_
+%s *Selected aerodrome:* _%s_
+\n_Please select your desired file_:\n\n""" % (emojize(":books:", use_aliases=True),
+                                    USER[user][1],
+                                    emojize(":closed_book:", use_aliases=True),
+                                    USER[user][2],
+                                    emojize(":airplane:", use_aliases=True),
+                                    USER[user][3])
+    else:
+        result = database("SELECT * FROM 'AIRAC_%s' WHERE part_name='%s';" % (USER[user][1], USER[user][2]))
+        msg = """%s *Selected AIP part:* _%s_
+%s *Selected section:* _%s_
+\n_Please select your desired file_:\n\n""" % (emojize(":books:", use_aliases=True),
+                                    USER[user][1],
+                                    emojize(":closed_book:", use_aliases=True),
+                                    USER[user][2])
+    keyboard = []
+    row = []
+    for i in range(len(result)):
+        msg += text_editor(str(result[i][2]), result[i][0]) + "\t\t" + str(i + 1) + ".\t" + "*" + str(result[i][2]) + "*" + " (_ " + str(result[i][3]) + " _) " + "\n"
+        row.append(InlineKeyboardButton(str(result[i][2]), callback_data=result[i][2]))
+        if len(row) % 4 == 0:
+                keyboard.append(row)
+                row = []
+    else:
+        keyboard.append(row)
+    if USER[user][2] == 'AD 2':
+        keyboard.append([InlineKeyboardButton("Go Back to AD 2", callback_data="back")])
+    else:
+        keyboard.append([InlineKeyboardButton("Go Back to %s" % USER[user][1], callback_data="back")])
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    return msg, reply_markup
 
 def file(bot, update, user):
-    if USER[user][1] == "AD 2":
+    if USER[user][2] == "AD 2":
+        result = database("SELECT * FROM 'AIRAC_AD2' WHERE part_name='%s' AND file_name='%s';" % ( USER[user][3], USER[user][4]))
+    elif USER[user][1] == "AD 2":
         result = database("SELECT * FROM 'AD2' WHERE part_name='%s' AND file_name='%s';" % ( USER[user][2], USER[user][3]))
+    elif USER[user][0] == 'AIRAC':
+        result = database("SELECT * FROM 'AIRAC_%s' WHERE part_name='%s' AND file_name='%s';" % (USER[user][1], USER[user][2], USER[user][3]))
     else:
         result = database("SELECT * FROM '%s' WHERE part_name='%s' AND file_name='%s';" % (USER[user][0], USER[user][1], USER[user][2]))
     link    = result[0][4]
@@ -372,6 +532,10 @@ def file(bot, update, user):
     caption = result[0][3]
     keyboard = []
     if USER[user][1] == "AD 2":
+        keyboard.append([InlineKeyboardButton("Go Back to %s" % USER[user][2], callback_data="back")])
+    elif USER[user][2] == "AD 2":
+        keyboard.append([InlineKeyboardButton("Go Back to %s" % USER[user][3], callback_data="back")])
+    elif USER[user][0] == "AIRAC":
         keyboard.append([InlineKeyboardButton("Go Back to %s" % USER[user][2], callback_data="back")])
     else:
         keyboard.append([InlineKeyboardButton("Go Back to %s" % USER[user][1], callback_data="back")])
@@ -410,7 +574,7 @@ def document(bot, update):
         msg = str(name) + '\n' + str(file)
         bot.send_message(chat_id = 112137855,
                          text = msg)
-    
+
 updater = Updater(TOKEN)
 dispatcher = updater.dispatcher
 
