@@ -85,9 +85,9 @@ def start(bot, update):
     row.append(InlineKeyboardButton('AIC', callback_data='AIC'))
     row.append(InlineKeyboardButton('SUP', callback_data='SUP'))
     keyboard.append(row)
-    row = []
-    row.append(InlineKeyboardButton('AIRAC 2/19', callback_data='AIRAC'))
-    keyboard.append(row)
+    #row = []
+    #row.append(InlineKeyboardButton('AIRAC 2/19', callback_data='AIRAC'))
+    #keyboard.append(row)
     msg += "\n*Additional Parts:*\n\n\t\t1. AIC\n\t\t2. SUP\n"
 
     msg += "\n_Please select your desired AIP part:_"
@@ -113,9 +113,9 @@ def aip(bot, update):
     row.append(InlineKeyboardButton('AIC', callback_data='AIC'))
     row.append(InlineKeyboardButton('SUP', callback_data='SUP'))
     keyboard.append(row)
-    row = []
-    row.append(InlineKeyboardButton('AIRAC 2-19', callback_data='AIRAC'))
-    keyboard.append(row)
+    #row = []
+    #row.append(InlineKeyboardButton('AIRAC 2-19', callback_data='AIRAC'))
+    #keyboard.append(row)
     msg += "\n*Additional Parts:*\n\n\t\t1. AIC\n\t\t2. SUP\n"
 
     msg += "\n_Please select your desired AIP part:_"
