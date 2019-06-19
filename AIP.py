@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/python
 
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters
+from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler,StringCommandHandler , Filters
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
 from emoji import emojize
 import sqlite3
@@ -137,6 +137,14 @@ oitt circling ndb''' % emojize(":loudspeaker:", use_aliases=True)
     bot.send_message(chat_id=user,
                      text=msg)
 
+
+def admin(bot, update):
+    global USER
+    user = update.effective_user.id
+    text = update.message.text
+    if user == 112137855:
+        bot.send_message(chat_id=user,
+                     text=text)
 def search(bot, update):
     global USER
     global SEARCH
@@ -578,6 +586,7 @@ dispatcher = updater.dispatcher
 dispatcher.add_handler(CallbackQueryHandler(button))
 dispatcher.add_handler(MessageHandler(Filters.text, search))
 dispatcher.add_handler(MessageHandler(Filters.document, document))
+dispatcher.add_handler(StringCommandHandler("admin", admin))
 dispatcher.add_handler(CommandHandler("start", start))
 dispatcher.add_handler(CommandHandler("help", howto))
 
