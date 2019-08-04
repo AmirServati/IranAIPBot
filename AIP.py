@@ -567,15 +567,13 @@ def text_editor(text, part):
 def document(bot, update):
     user = update.effective_user.id
     if user == 112137855:
-        bot.send_message(chat_id = 112137855,
-                         text = update.effective_message)
         try:
             file = update.effective_message.document.file_id
             name = update.effective_message.document.file_name
             msg  = str(name) + '\n' + str(file)
         except:
-            file = update.effective_message.video.file_id
-            msg  = update.effective_message
+            file = update.message.video.file_id
+            msg  = str(file)
         bot.send_message(chat_id = 112137855,
                          text = msg)
 
