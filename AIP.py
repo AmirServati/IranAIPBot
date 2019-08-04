@@ -573,7 +573,7 @@ def document(bot, update):
             msg  = str(name) + '\n' + str(file)
         except:
             file = update.effective_message.video.file_id
-            msg  = str(file)
+            msg  = update.effective_message
         bot.send_message(chat_id = 112137855,
                          text = msg)
 
