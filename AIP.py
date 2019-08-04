@@ -574,10 +574,10 @@ def document(bot, update):
             name = update.effective_message.document.file_name
             msg  = str(name) + '\n' + str(file)
         elif update.effective_message.video:
-            file = update.effective_message.video.file_id
-            msg  = str(file)
             bot.send_message(chat_id = 112137855,
                          text = "video")
+            file = update.effective_message.video.file_id
+            msg  = str(file)
         bot.send_message(chat_id = 112137855,
                          text = msg)
 
