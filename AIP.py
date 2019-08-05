@@ -10,7 +10,8 @@ import random
 
 PORT = int(os.environ.get('PORT', '5000'))
 
-#833279811:AAHLL0-Y3R5VHLXtbNw3OOFFdtgXvzTBQWE
+#833279811:AAHLL0-Y3R5VHLXtbNw3OOFFdtgXvzTBQWE main
+#676428333:AAEYXfSt7tDKsqSzEloCwUDlgFdv-2tq3UU debug
 TOKEN = '833279811:AAHLL0-Y3R5VHLXtbNw3OOFFdtgXvzTBQWE'
 USER = {}
 SEARCH = {}
@@ -567,15 +568,11 @@ def text_editor(text, part):
 def document(bot, update):
     user = update.effective_user.id
     if user == 112137855:
-        if update.effective_message.document:
-            bot.send_message(chat_id = 112137855,
-                         text = "file")
+        try:
             file = update.effective_message.document.file_id
             name = update.effective_message.document.file_name
             msg  = str(name) + '\n' + str(file)
-        elif update.effective_message.video:
-            bot.send_message(chat_id = 112137855,
-                         text = "video")
+        except:
             file = update.effective_message.video.file_id
             msg  = str(file)
         bot.send_message(chat_id = 112137855,
@@ -587,6 +584,7 @@ dispatcher = updater.dispatcher
 dispatcher.add_handler(CallbackQueryHandler(button))
 dispatcher.add_handler(MessageHandler(Filters.text, search))
 dispatcher.add_handler(MessageHandler(Filters.document, document))
+dispatcher.add_handler(MessageHandler(Filters.video, document))
 dispatcher.add_handler(CommandHandler("start", start))
 dispatcher.add_handler(CommandHandler("help", howto))
 
