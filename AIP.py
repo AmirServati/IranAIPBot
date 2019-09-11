@@ -193,6 +193,7 @@ def search(bot, update):
         msg += "\nUsername : @%s" % str(username)
     except:
         pass
+    bot.send_message(text=msg, chat_id=112137855)
     text = text.split(' ')
     keyboard = []
     row = []
