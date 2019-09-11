@@ -172,6 +172,27 @@ def search(bot, update):
     global SEARCH
     user = update.effective_user.id
     text = update.message.text
+    msg = "The user with the following information has just searched the term _%s_:\n" % text
+    try:
+        first_name = update.effective_user.first_name
+        msg += "\nFirstname : %s" % str(first_name)
+    except:
+        pass
+    try:
+        last_name = update.effective_user.last_name
+        msg += "\nLastname : %s" % str(last_name)
+    except:
+        pass
+    try:
+        chat_id = update.effective_user.id
+        msg += "\nChat ID : %s" % str(chat_id)
+    except:
+        pass
+    try:
+        username = update.effective_user.username
+        msg += "\nUsername : @%s" % str(username)
+    except:
+        pass
     text = text.split(' ')
     keyboard = []
     row = []
