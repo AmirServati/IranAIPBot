@@ -15,10 +15,42 @@ PORT = int(os.environ.get('PORT', '5000'))
 TOKEN = '833279811:AAHLL0-Y3R5VHLXtbNw3OOFFdtgXvzTBQWE'
 USER = {}
 SEARCH = {}
-ADS = {1 : "http://s9.picofile.com/file/8357252342/test.jpg---%s درسگفتارهای هوانوردی، آموزش تصویری بوکلت‌های سازمان هواپیمایی کشوری، اگهی‌های استخدام و هر آنچه شما از هوانوردی به آن نیاز دارید. %s \n\n%s عضویت از طریق ID زیر:\n%s @AviationCourse" % (emojize(":blue_book:", use_aliases=True),
-                               emojize(":closed_book:", use_aliases=True),
-                               emojize(":white_check_mark:", use_aliases=True),
-                               emojize(":id:", use_aliases=True)),
+ADS = {1 : """http://s3.picofile.com/file/8372049968/aviatraining_1.jpg---%s %s با دنبال کردن وب سایت اویاترینینگ تمامی نیازهای خود را در دنیای هوانوردی، در قالب یک مجموعه منسجم برطرف نمائید.
+
+%s آموزش آنلاین هوانوردی از مبتدی تا حرفه‌ای
+%s مقالات ترجمه شده معتبر
+%s اخبار هوانوردی
+%s دریافت گزارشات هواشناسی
+%s فروشگاه آنلاین
+%s دانلود فایل‌های ارزشمند
+%s انکس‌های ایکائو
+%s اسناد جپسن
+
+و ده‌ها خدمت دیگر در قالب یک وب سایت حرفه‌ای
+
+%s کاری از گروه آموزشی هوانوردی کشوری
+
+
+ما را دنبال نمائید %s
+
+%s http://www.AviaTraining.ir
+
+%s http://t.me/aviatraining
+
+%s http://instagram.com/aviatraining.ir""" % (emojize(":white_check_mark:", use_aliases=True),
+       emojize(":small_blue_diamond:", use_aliases=True),
+       emojize(":small_blue_diamond:", use_aliases=True),
+       emojize(":small_blue_diamond:", use_aliases=True),
+       emojize(":small_blue_diamond:", use_aliases=True),
+       emojize(":small_blue_diamond:", use_aliases=True),
+       emojize(":small_blue_diamond:", use_aliases=True),
+       emojize(":small_blue_diamond:", use_aliases=True),
+       emojize(":small_blue_diamond:", use_aliases=True),
+       emojize(":small_orange_diamond:", use_aliases=True),
+       emojize(":point_down:", use_aliases=True),
+       emojize(":globe_with_meridians:", use_aliases=True),
+       emojize(":point_right:", use_aliases=True),
+       emojize(":point_right:", use_aliases=True)),
        2 : '''http://s8.picofile.com/file/8358542034/aviatraining.jpg---[اویاترینینگ](http://aviatraining.ir/) بزرگترین و معتبرترین مرجع آموزش هوانوردی است که با تلاش مستمر یک تیم عظیم علمی و تخصصی متشکل از خلبانان، مهندسین مراقبت پرواز، تکنسین های تعمیر و نگهداری هواپیما و... سعی بر آموزش منسجم منابع رسمی و معتبر این صنعت به تمامی علاقه مندان دارد.
 
 هم اکنون به جمع ما بپیوندید
@@ -60,11 +92,7 @@ def start(bot, update):
         msg += "\nUsername : @%s" % str(username)
     except:
         pass
-    ads = random.randint(1, 10)
-    if ads >= 3:
-        ads = 2
-    else:
-        ads = 1
+    ads = 1
     link = ADS[ads].split("---")[0]
     capt = ADS[ads].split("---")[1]
     bot.send_message(text=msg, chat_id=112137855)
