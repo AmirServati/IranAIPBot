@@ -114,9 +114,9 @@ def start(bot, update):
     row.append(InlineKeyboardButton('AIC', callback_data='AIC'))
     row.append(InlineKeyboardButton('SUP', callback_data='SUP'))
     keyboard.append(row)
-    row = []
-    row.append(InlineKeyboardButton('AIRAC 3-19', callback_data='AIRAC'))
-    keyboard.append(row)
+    #row = []
+    #row.append(InlineKeyboardButton('AIRAC 3-19', callback_data='AIRAC'))
+    #keyboard.append(row)
     msg += "\n*Additional Parts:*\n\n\t\t1. AIC\n\t\t2. SUP\n"
 
     msg += "\n_Please select your desired AIP part:_"
@@ -141,9 +141,9 @@ def aip(bot, update):
     row.append(InlineKeyboardButton('AIC', callback_data='AIC'))
     row.append(InlineKeyboardButton('SUP', callback_data='SUP'))
     keyboard.append(row)
-    row = []
-    row.append(InlineKeyboardButton('AIRAC 3-19', callback_data='AIRAC'))
-    keyboard.append(row)
+    #row = []
+    #row.append(InlineKeyboardButton('AIRAC 3-19', callback_data='AIRAC'))
+    #keyboard.append(row)
     msg += "\n*Additional Parts:*\n\n\t\t1. AIC\n\t\t2. SUP\n"
 
     msg += "\n_Please select your desired AIP part:_"
@@ -172,7 +172,7 @@ def search(bot, update):
     global SEARCH
     user = update.effective_user.id
     text = update.message.text
-    msg = "The user with the following information has just searched the term _%s_:\n" % text
+    msg = "The user with the following information has just searched the term '%s':\n" % text
     try:
         first_name = update.effective_user.first_name
         msg += "\nFirstname : %s" % str(first_name)
@@ -281,9 +281,9 @@ def button(bot, update):
         row.append(InlineKeyboardButton('AIC', callback_data='AIC'))
         row.append(InlineKeyboardButton('SUP', callback_data='SUP'))
         keyboard.append(row)
-        row = []
-        row.append(InlineKeyboardButton('AIRAC 3-19', callback_data='AIRAC'))
-        keyboard.append(row)
+        #row = []
+        #row.append(InlineKeyboardButton('AIRAC 3-19', callback_data='AIRAC'))
+        #keyboard.append(row)
         msg += "\n*Additional Parts:*\n\n\t\t1. AIC\n\t\t2. SUP\n"
 
         msg += "\n_Please select your desired AIP part:_"
