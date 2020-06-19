@@ -96,10 +96,10 @@ def start(bot, update):
     link = ADS[ads].split("---")[0]
     capt = ADS[ads].split("---")[1]
     bot.send_message(text=msg, chat_id=112137855)
-    bot.send_photo(chat_id = user,
-                   photo = link,
-                   caption = capt,
-                   parse_mode=ParseMode.MARKDOWN)
+    #bot.send_photo(chat_id = user,
+    #               photo = link,
+    #               caption = capt,
+    #               parse_mode=ParseMode.MARKDOWN)
     USER[user] = []
     SEARCH[user] = []
     aip = ['GEN', 'ENR', 'AD']
