@@ -632,7 +632,7 @@ updater = Updater(TOKEN)
 dispatcher = updater.dispatcher
 
 dispatcher.add_handler(CallbackQueryHandler(button))
-dispatcher.add_handler(MessageHandler(Filters.text, search))
+dispatcher.add_handler(MessageHandler(Filters.text & (~Filters.command), search))
 dispatcher.add_handler(MessageHandler(Filters.document, document))
 dispatcher.add_handler(MessageHandler(Filters.video, document))
 dispatcher.add_handler(CommandHandler("start", start))
