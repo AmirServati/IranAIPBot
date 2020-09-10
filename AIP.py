@@ -8,7 +8,7 @@ import sqlite3
 import os
 import random
 
-PORT = int(os.environ.get('PORT', '8443'))
+PORT = int(os.environ.get('PORT', '5000'))
 
 #833279811:AAHLL0-Y3R5VHLXtbNw3OOFFdtgXvzTBQWE main
 #676428333:AAEYXfSt7tDKsqSzEloCwUDlgFdv-2tq3UU debug
